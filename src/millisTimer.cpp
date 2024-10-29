@@ -1,35 +1,31 @@
 #include "millisTimer.h"
-#include <Arduino.h>
 
-extern unsigned long startLapMillis;
-extern bool isLapRunning;
-extern unsigned long lastLapMillis;
-#define RSSIPIN A4
-#define ADC_THRESHOLD 340
+MillisLapTimer::MillisLapTimer(int rssiPin, unsigned int adcThreshold)
+    : rssiPin(rssiPin), adcThreshold(adcThreshold), startLapMillis(0), lastLapMillis(0), isLapRunning(false) {}
 
-// Simple lap timer
-void printTime(unsigned long timeMillis)
+// Print time in minutes:seconds:milliseconds format
+void MillisLapTimer::printTime(unsigned long timeMillis) const
 {
-    unsigned long minutes = timeMillis / 60000;          // Get minutes
-    unsigned long seconds = (timeMillis % 60000) / 1000; // Get seconds
-    unsigned long milliseconds = timeMillis % 1000;      // Get milliseconds
+    unsigned long minutes = timeMillis / 60000;
+    unsigned long seconds = (timeMillis % 60000) / 1000;
+    unsigned long milliseconds = timeMillis % 1000;
 
-    Serial.print((minutes < 10) ? "0" : ""); // Leading zero if < 10
+    Serial.print((minutes < 10) ? "0" : "");
     Serial.print(minutes);
     Serial.print(":");
-
-    Serial.print((seconds < 10) ? "0" : ""); // Leading zero if < 10
+    Serial.print((seconds < 10) ? "0" : "");
     Serial.print(seconds);
     Serial.print(":");
 
     if (milliseconds < 100)
-        Serial.print("0"); // Leading zero for MS if < 100
+        Serial.print("0");
     if (milliseconds < 10)
         Serial.print("0");
     Serial.print(milliseconds);
 }
 
-void printRunningLapTime()
+// Print running lap time if a lap is in progress
+void MillisLapTimer::printRunningLapTime()
 {
     if (isLapRunning)
     {
@@ -42,9 +38,10 @@ void printRunningLapTime()
     }
 }
 
-void simpleLapTimer()
+// Update function to be called repeatedly in loop to print RSSI value and manage laptiming
+void MillisLapTimer::update()
 {
-    unsigned int rssiValue = analogRead(RSSIPIN);
+    unsigned int rssiValue = analogRead(rssiPin);
 
     Serial.print("RSSI Value: ");
     Serial.print(rssiValue);
@@ -52,7 +49,8 @@ void simpleLapTimer()
 
     unsigned long currentTime = millis();
 
-    if (rssiValue > ADC_THRESHOLD && (currentTime - lastLapMillis) > 5000)
+    // Check for lap completion based on RSSI and debounce threshold
+    if (rssiValue > adcThreshold && (currentTime - lastLapMillis) > 5000) // debounce threshold of 5 seconds
     {
         if (isLapRunning)
         {
@@ -65,6 +63,7 @@ void simpleLapTimer()
             isLapRunning = false;
         }
 
+        // Start a new lap
         startLapMillis = currentTime;
         lastLapMillis = currentTime;
         isLapRunning = true;
