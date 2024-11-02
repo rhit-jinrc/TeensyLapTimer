@@ -85,7 +85,7 @@ class LapTimerTester:
             print("Error: The dimensions of laptime_counter and all_rssi_values do not match.")
 
 # Usage
-file_path = input("Enter the path to the CSV file: ")
+file_path = input("Enter the path to the CSV file: ") #rssidata.csv provided in the same test folder
 lap_timer_tester = LapTimerTester(file_path)
 lap_timer_tester.read_csv_file()
 lap_timer_tester.display_laptimes()
