@@ -122,6 +122,11 @@ void InterruptLapTimer::readRXValue()
     }
 }
 
+bool InterruptLapTimer::isLapComplete() const
+{
+    return (isFinished == true && underThresholdCounter >= 5000);
+}
+
 void InterruptLapTimer::processData()
 {
     static int lastProcessedLapIndex = 0;

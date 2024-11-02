@@ -17,6 +17,7 @@ public:
     void processData();
     void saveToSDCard();
     void readRXValue();
+    bool isLapComplete() const;
 
 private:
     void createSDFile();
