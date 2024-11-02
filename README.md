@@ -19,4 +19,6 @@ The millis() timer implementations displays lap times on the serial monitor, and
 ## Components
 - Teensy 4.1 Development Board
 - RX5808 5.8G AV Receiver Module
+- AKK Wireless 5.8GHz FPV Transmitter
+- Micro SD Card (to store RSSI data)
   
