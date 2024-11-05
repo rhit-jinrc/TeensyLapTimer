@@ -14,7 +14,6 @@ class LapTimerTester:
         over_threshold = False
         debounce_threshold = 5000
         threshold_counter = 0
-        first_threshold_crossed = False  # Flag to mark the first lap
 
         try:
             with open(self.file_path, 'r') as file:
@@ -31,15 +30,8 @@ class LapTimerTester:
                         over_threshold = True  # Mark that we are above the threshold
                         threshold_counter = 0
                         
-                        if not first_threshold_crossed:
-                            # First time crossing the threshold, mark it as the start of the first lap
-                            absolute_laptime = self.laptime_counter
-                            self.absolute_laptimes.append(absolute_laptime)
-                            first_threshold_crossed = True
-                        else:
-                            # Subsequent crossings (indicating the start of a new lap)
-                            absolute_laptime = self.laptime_counter
-                            self.absolute_laptimes.append(absolute_laptime)
+                        absolute_laptime = self.laptime_counter
+                        self.absolute_laptimes.append(absolute_laptime)
 
                     elif rssi_value < ADC_threshold and over_threshold:
                         over_threshold = False  # RSSI is now below the threshold

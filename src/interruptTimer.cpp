@@ -86,39 +86,47 @@ void InterruptLapTimer::printRSSI()
 void InterruptLapTimer::readRXValue()
 {
     unsigned int rssiValue = analogRead(rssiPin);
-    absoluteTimer++;
+    absoluteTimer++; // Increment the absolute time counter
 
     const unsigned long debounceThreshold = 5000;
-    if (rssiValue >= adcThreshold && !overThreshold && thresholdCounter >= debounceThreshold)
-    {
-        overThreshold = true;
-        unsigned long currentLapTime = absoluteTimer;
 
-        if (previousLapTime != 0 && lapIndex < maxLaps)
+    // Check if the RSSI value crosses the threshold
+    if (rssiValue >= adcThreshold)
+    {
+        if (!overThreshold && underThresholdCounter >= debounceThreshold)
         {
+            overThreshold = true;
+            unsigned long currentLapTime = absoluteTimer;
+
             unsigned long lapDuration = currentLapTime - previousLapTime;
             lapTimesArray[lapIndex++] = lapDuration;
+
+            previousLapTime = currentLapTime;
+            thresholdCounter = 0;
+            underThresholdCounter = 0;
         }
-        previousLapTime = currentLapTime;
-        thresholdCounter = 0;
-        underThresholdCounter = 0;
-    }
-    else if (rssiValue >= adcThreshold && overThreshold)
-    {
-        underThresholdCounter = 0;
-    }
-    else if (rssiValue < adcThreshold && overThreshold)
-    {
-        underThresholdCounter++;
-        if (underThresholdCounter >= 5000)
+
+        // Check if car is idling by the laptimer for 5 seconds
+        else if (overThreshold && thresholdCounter >= debounceThreshold)
         {
+            // RSSI stayed over the threshold long enough to consider car idling
             overThreshold = false;
             isFinished = true;
+        }
+        else
+        {
+            thresholdCounter++; // Increment threshold counter while RSSI is high, but when the counter is less than the debounce
         }
     }
     else
     {
-        thresholdCounter++;
+        // RSSI dropped below the threshold
+        if (overThreshold)
+        {
+            overThreshold = false;
+        }
+        thresholdCounter = 0; // Reset counter when RSSI is below threshold
+        underThresholdCounter++;
     }
 }
 
