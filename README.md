@@ -23,7 +23,7 @@ The millis() timer implementations displays lap times on the serial monitor, and
 - Micro SD Card (to store RSSI data)
   
 ## Schematic
-TODO
+![](pictures/Schematic.png)
 
 ## Pictures
 TODO
