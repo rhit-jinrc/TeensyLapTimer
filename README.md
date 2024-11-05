@@ -24,6 +24,3 @@ The millis() timer implementations displays lap times on the serial monitor, and
   
 ## Schematic
 ![](pictures/Schematic.png)
-
-## Pictures
-TODO
