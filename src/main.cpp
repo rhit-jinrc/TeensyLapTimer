@@ -2,9 +2,8 @@
 #include "interruptTimer.h"
 #include "millisTimer.h"
 
-// Usage: to use the millisLapTimer, please comment out interruptLapTimer.setup(); and timer.begin(...) in setup(), and the isLapComplete
-// conditional check in loop
-// To use the interruptLapTimer, please comment out millisLapTimer.update() and millisLapTimer.printRunningLapTimer() in loop()
+// Toggle between using InterruptLapTimer and MillisLapTimer
+#define USE_INTERRUPT_TIMER // Comment this out to use MillisLapTimer
 
 MillisLapTimer millisLapTimer(/* rssiPin */ A4, /* adcThreshold */ 340);
 InterruptLapTimer interruptLapTimer(/* ledPin */ 13, /* rssiPin */ A4, /* sdPin */ BUILTIN_SDCARD, /* adcThreshold */ 340, /* maxLaps */ 100);
@@ -15,22 +14,28 @@ IntervalTimer timer;
 void setup()
 {
   Serial.begin(9600);
+
+#ifdef USE_INTERRUPT_TIMER
   interruptLapTimer.setup();
 
-  // Start the timer, calling readRXValue on lapTimer every 1 ms
+  // Start the timer, calling readRXValue on interruptLapTimer every 1 ms
   timer.begin([]()
-              { interruptLapTimer.readRXValue(); }, 1000);
+              { interruptLapTimer.readRXValue(); },
+              1000);
+#endif
 }
 
 void loop()
 {
-  millisLapTimer.update(); // Print RSSI value and manage laptiming
-
+#ifndef USE_INTERRUPT_TIMER
+  millisLapTimer.update();              // Print RSSI value and manage lap timing
   millisLapTimer.printRunningLapTime(); // Optionally, display the running lap time
+#endif
 
+#ifdef USE_INTERRUPT_TIMER
   if (interruptLapTimer.isSingleLapComplete())
   {
-    // TODO: send CAN message of laptime here
+    // TODO: send CAN message of lap time here
     uint32_t lapTime = interruptLapTimer.getLapTime();
     Serial.println(lapTime);
     interruptLapTimer.printTime(lapTime);
@@ -48,4 +53,5 @@ void loop()
 
     Serial.println("Lap timing complete, data saved.");
   }
+#endif
 }
