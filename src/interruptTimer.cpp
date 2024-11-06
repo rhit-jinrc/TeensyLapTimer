@@ -2,8 +2,8 @@
 
 InterruptLapTimer::InterruptLapTimer(uint8_t ledPin, uint8_t rssiPin, uint8_t sdPin, unsigned int adcThreshold, size_t maxLaps)
     : ledPin(ledPin), rssiPin(rssiPin), sdPin(sdPin), adcThreshold(adcThreshold), maxLaps(maxLaps),
-      absoluteTimer(0), previousLapTime(0), lapIndex(0), thresholdCounter(0), underThresholdCounter(0),
-      isFinished(false), overThreshold(false) {}
+      absoluteTimer(0), previousLapTime(0), lapDuration(0), lapIndex(0), thresholdCounter(0), underThresholdCounter(0),
+      isFinished(false), overThreshold(false), finishedALap(false) {}
 
 void InterruptLapTimer::setup()
 {
@@ -98,8 +98,9 @@ void InterruptLapTimer::readRXValue()
             overThreshold = true;
             unsigned long currentLapTime = absoluteTimer;
 
-            unsigned long lapDuration = currentLapTime - previousLapTime;
+            lapDuration = currentLapTime - previousLapTime;
             lapTimesArray[lapIndex++] = lapDuration;
+            finishedALap = true;
 
             previousLapTime = currentLapTime;
             thresholdCounter = 0;
@@ -121,6 +122,7 @@ void InterruptLapTimer::readRXValue()
     else
     {
         // RSSI dropped below the threshold
+        finishedALap = false;
         if (overThreshold)
         {
             overThreshold = false;
@@ -130,9 +132,19 @@ void InterruptLapTimer::readRXValue()
     }
 }
 
+unsigned long InterruptLapTimer::getLapTime()
+{
+    return lapDuration;
+}
+
+bool InterruptLapTimer::isSingleLapComplete() const
+{
+    return finishedALap;
+}
+
 bool InterruptLapTimer::isLapComplete() const
 {
-    return (isFinished == true && underThresholdCounter >= 5000);
+    return isFinished;
 }
 
 void InterruptLapTimer::processData()
@@ -159,4 +171,25 @@ void InterruptLapTimer::saveToSDCard()
     {
         rssiValueFile.close();
     }
+}
+
+// Print time in minutes:seconds:milliseconds format
+void InterruptLapTimer::printTime(unsigned long timeMillis) const
+{
+    unsigned long minutes = timeMillis / 60000;
+    unsigned long seconds = (timeMillis % 60000) / 1000;
+    unsigned long milliseconds = timeMillis % 1000;
+
+    Serial.print((minutes < 10) ? "0" : "");
+    Serial.print(minutes);
+    Serial.print(":");
+    Serial.print((seconds < 10) ? "0" : "");
+    Serial.print(seconds);
+    Serial.print(":");
+
+    if (milliseconds < 100)
+        Serial.print("0");
+    if (milliseconds < 10)
+        Serial.print("0");
+    Serial.print(milliseconds);
 }

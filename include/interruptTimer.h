@@ -18,6 +18,9 @@ public:
     void saveToSDCard();
     void readRXValue();
     bool isLapComplete() const;
+    bool isSingleLapComplete() const;
+    unsigned long getLapTime();
+    void printTime(unsigned long timeMillis) const;
 
 private:
     void createSDFile();
@@ -31,6 +34,7 @@ private:
 
     unsigned long absoluteTimer;
     unsigned long previousLapTime;
+    unsigned long lapDuration;
     unsigned long lapTimesArray[100]; // Maximum number of laps (adjustable)
     volatile int lapIndex;
     std::vector<unsigned long> lapTimes;
@@ -42,6 +46,7 @@ private:
     volatile unsigned int underThresholdCounter;
     volatile bool isFinished;
     volatile bool overThreshold;
+    volatile bool finishedALap;
 };
 
 #endif

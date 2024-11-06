@@ -28,6 +28,14 @@ void loop()
 
   millisLapTimer.printRunningLapTime(); // Optionally, display the running lap time
 
+  if (interruptLapTimer.isSingleLapComplete())
+  {
+    // TODO: send CAN message of laptime here
+    uint32_t lapTime = interruptLapTimer.getLapTime();
+    Serial.println(lapTime);
+    interruptLapTimer.printTime(lapTime);
+  }
+
   // Check if the lap is complete for the interrupt-based timer
   if (interruptLapTimer.isLapComplete())
   {
