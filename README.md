@@ -8,7 +8,7 @@ A basic lap timer that uses the `millis()` function to measure and display lap t
 ## Advanced Lap Timer (IntervalTimer-based)
 A more precise lap timer that leverages the Teensy's `IntervalTimer` for accurate timing using hardware interrupts. This implementation achieves higher precision than millis(). 
 
-The millis() timer implementations displays lap times on the serial monitor, and I am currently working on implementing a friendly-display for the IntervalTimer. For both timers, the project includes an RSSI-based trigger mechanism to detect when a lap is completed. The `IntervalTimer`-based solution provides more accurate timing by handling interrupts at precise intervals, making it ideal for more demanding timing scenarios.
+Both implementations display lap times on the serial monitor, and I am currently working on implementing CAN functionality to be able to display the laptimes on ECUMaster on the driver dashboard. For both timers, the project includes an RSSI-based trigger mechanism to detect when a lap is completed. The `IntervalTimer`-based solution provides more accurate timing by handling interrupts at precise intervals, making it ideal for more demanding timing scenarios.
 
 ## Features
 - **Simple `millis()`-based lap timer** for general timing purposes.
@@ -23,7 +23,4 @@ The millis() timer implementations displays lap times on the serial monitor, and
 - Micro SD Card (to store RSSI data)
   
 ## Schematic
-TODO
-
-## Pictures
-TODO
+![](pictures/Schematic.png)
