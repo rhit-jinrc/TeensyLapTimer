@@ -6,7 +6,7 @@ This project provides two lap timing implementations for a Teensy 4.1 microcontr
 A basic lap timer that uses the `millis()` function to measure and display lap times. This method is sufficient for applications that don't require high precision, with times displayed in `MM:SS:MS` format (minutes, seconds, and milliseconds).
 
 ## Advanced Lap Timer (IntervalTimer-based)
-A more precise lap timer that leverages the Teensy's `IntervalTimer` for accurate timing using hardware interrupts. This implementation achieves higher precision than millis(). 
+A more precise lap timer that leverages the Teensy's `IntervalTimer` for accurate timing using hardware interrupts. This implementation achieves higher precision than millis(). Read more here: [Link Test] https://docs.arduino.cc/libraries/teensy_timerinterrupt/
 
 Both implementations display lap times on the serial monitor, and I am currently working on implementing CAN functionality to be able to display the laptimes on ECUMaster on the driver dashboard. For both timers, the project includes an RSSI-based trigger mechanism to detect when a lap is completed. The `IntervalTimer`-based solution provides more accurate timing by handling interrupts at precise intervals, making it ideal for more demanding timing scenarios.
 
