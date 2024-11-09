@@ -3,7 +3,7 @@
 #include "millisTimer.h"
 
 // Toggle between using InterruptLapTimer and MillisLapTimer
-#define USE_INTERRUPT_TIMER // Comment this out to use MillisLapTimer
+// #define USE_INTERRUPT_TIMER // Comment this out to use MillisLapTimer
 
 MillisLapTimer millisLapTimer(/* rssiPin */ A4, /* adcThreshold */ 340);
 InterruptLapTimer interruptLapTimer(/* ledPin */ 13, /* rssiPin */ A4, /* sdPin */ BUILTIN_SDCARD, /* adcThreshold */ 340, /* maxLaps */ 100);

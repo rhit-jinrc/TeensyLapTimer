@@ -64,50 +64,50 @@ volatile int lapIndex = 0; // Use volatile to ensure ISR and main code share the
 unsigned long previousLapTime = 0;
 std::vector<unsigned long> lapTimes;
 
-void setup()
-{
-    Serial.begin(9600);
-    pinMode(RSSIPIN, INPUT);
-    pinMode(LED, OUTPUT);
-    digitalWrite(LED, LOW);
-    // can0.begin();
-    // can0.setBaudRate(1000000);
-    delay(100);
+// void setup()
+// {
+//     Serial.begin(9600);
+//     pinMode(RSSIPIN, INPUT);
+//     pinMode(LED, OUTPUT);
+//     digitalWrite(LED, LOW);
+//     // can0.begin();
+//     // can0.setBaudRate(1000000);
+//     delay(100);
 
-    // createSDFile();
-    //  createSDFileRSSIOnly();
-    delay(100);
+//     // createSDFile();
+//     //  createSDFileRSSIOnly();
+//     delay(100);
 
-    // myTimer.begin(readRXValue, 1000);
-    //  myTimer.begin(logRSSIOnly, 1000);
-    myTimer.begin(printRSSI, 1000);
-    delay(100);
+//     // myTimer.begin(readRXValue, 1000);
+//     //  myTimer.begin(logRSSIOnly, 1000);
+//     myTimer.begin(printRSSI, 1000);
+//     delay(100);
 
-    // tx_msg.id = 0x100;
-    // tx_msg.buf[0] = 0x01;
-    // tx_msg.buf[1] = 0x02;
-    // tx_msg.buf[2] = 0x03;
-    // tx_msg.buf[3] = 0x04;
-    // tx_msg.buf[4] = 0x05;
-    // tx_msg.buf[5] = 0x06;
-    // tx_msg.buf[6] = 0x07;
-    // tx_msg.buf[7] = 0x69;
-}
+//     // tx_msg.id = 0x100;
+//     // tx_msg.buf[0] = 0x01;
+//     // tx_msg.buf[1] = 0x02;
+//     // tx_msg.buf[2] = 0x03;
+//     // tx_msg.buf[3] = 0x04;
+//     // tx_msg.buf[4] = 0x05;
+//     // tx_msg.buf[5] = 0x06;
+//     // tx_msg.buf[6] = 0x07;
+//     // tx_msg.buf[7] = 0x69;
+// }
 
-void loop()
-{
-    blinkLED(200);
-    // transmitData(100);
-    // if (isFinished)
-    // {
-    //   processData();
-    //   isFinished = false;
-    // }
+// void loop()
+// {
+//     blinkLED(200);
+//     // transmitData(100);
+//     // if (isFinished)
+//     // {
+//     //   processData();
+//     //   isFinished = false;
+//     // }
 
-    // simpleLapTimer();
-    // printRunningLapTime(); // Call function after ensuring it is declared and defined
-    //  delay(100);
-}
+//     // simpleLapTimer();
+//     // printRunningLapTime(); // Call function after ensuring it is declared and defined
+//     //  delay(100);
+// }
 
 void printRSSI()
 {
